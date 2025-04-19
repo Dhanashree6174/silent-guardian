@@ -1,0 +1,4 @@
+{
+    "microphone": ["zoom.exe", "discord.exe", "obs64.exe"],
+    "camera": ["zoom.exe", "teams.exe"]
+}
