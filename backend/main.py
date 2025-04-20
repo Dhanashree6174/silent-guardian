@@ -2,7 +2,7 @@ from fastapi import FastAPI # FastAPI is used to create an instance of the web s
 from datetime import datetime
 import psutil # allows you to get system and process information
 import json
-from utils import get_active_audio_apps, log_event
+from utils import get_active_audio_apps, is_camera_in_use, log_event
 
 app = FastAPI() # Creates an instance of the FastAPI, which is used to define API routes.
 
@@ -18,12 +18,19 @@ def get_running_apps():
 @app.get("/active-devices")
 def detect_devices():
     mic_apps = get_active_audio_apps()
+    cam_active = is_camera_in_use()
     suspicious = [app for app in mic_apps if app.lower() not in SAFE_APPS["microphone"]]
     
     for app in suspicious:
         log_event(app, "microphone")
+    if cam_active:
+        log_event("Unkown", "camera")
     
-    return {"mic_apps": mic_apps, "suspicious": suspicious}
+    return {
+        "mic_apps": mic_apps, 
+        "suspicious": suspicious,
+        "camera_active": cam_active
+        }
 
 @app.get("/logs")
 def get_logs():
