@@ -34,7 +34,15 @@ const fetchAudioUsageData = async () => {
 
     const camStatus = document.getElementById("cam-status");
     if(data.camera_active){
-      camStatus.textContent = "🟥 Camera is in use!";
+      // if(data.camera_apps){
+      //   console.log("camera using apps : ", camera_apps);
+      //   camStatus.textContent = `🟥 Camera is in use by: ${data.camera_apps.join(", ")}!`;
+      // }
+      // else{
+      //   console.log("No apps to show");
+      //   camStatus.textContent = "🟥 Camera is in use!"
+      // }
+      camStatus.textContent = "🟥 Camera is in use!"
       new Notification("📸 Camera Alert", {
         body: `Camera is currently active!`,
       });

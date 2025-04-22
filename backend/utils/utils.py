@@ -20,7 +20,7 @@ def get_active_audio_apps():
 
 def is_camera_in_use():
     cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
+    if not cap or not cap.isOpened():
         return True # if we can't access it, someone else might be using it
     ret, frame = cap.read()
     cap.release()
