@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import SafeAppsButton from "./SafeAppsButton";
+import SafeAppsModifier from "./SafeAppsModifier";
 import { Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -92,7 +92,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h1>Dashboard</h1>
+      <h1 className="text-center text-blue-300">Dashboard</h1>
 
       <div className="active-devices">
         <h2>Active Devices</h2>
@@ -133,8 +133,6 @@ const Dashboard = () => {
         <h2>App Access Pie Chart</h2>
         <Pie data={pieData} />
       </div>
-
-      <SafeAppsButton/>
     </div>
   );
 };

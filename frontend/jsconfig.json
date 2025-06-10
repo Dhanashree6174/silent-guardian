@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"] // components/ui is created in src/
+    }
+  }
+}
+
+// had to create this file for specifying alias for shadcn
