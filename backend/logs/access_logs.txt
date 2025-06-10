@@ -98,3 +98,16 @@
 2025-04-22 22:22:48.926518 - explorer.exe accessed microphone
 2025-04-22 22:22:48.930522 - WindowsCamera.exe accessed microphone
 2025-04-22 22:22:48.935520 - Unkown accessed camera
+2025-05-18 11:50:09.417078 - chrome.exe accessed microphone
+2025-06-09 00:48:56.191269 - chrome.exe accessed microphone
+2025-06-09 00:48:56.199927 - Spotify.exe accessed microphone
+2025-06-09 17:05:15.334872 - chrome.exe accessed microphone
+2025-06-09 17:05:58.545807 - chrome.exe accessed microphone
+2025-06-09 17:13:06.949527 - chrome.exe accessed microphone
+2025-06-09 17:15:02.744567 - chrome.exe accessed microphone
+2025-06-09 17:16:17.264998 - chrome.exe accessed microphone
+2025-06-09 17:21:18.670387 - chrome.exe accessed microphone
+2025-06-09 17:24:06.465063 - chrome.exe accessed microphone
+2025-06-10 00:55:10.376577 - chrome.exe accessed microphone
+2025-06-10 01:20:54.252010 - chrome.exe accessed microphone
+2025-06-10 01:27:02.306945 - chrome.exe accessed microphone

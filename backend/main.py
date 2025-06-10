@@ -2,6 +2,10 @@ from fastapi import FastAPI # FastAPI is used to create an instance of the web s
 from datetime import datetime
 import psutil # allows you to get system and process information
 import json
+# for getting safe apps from json file
+import os 
+from fastapi.responses import JSONResponse
+# importing defined functions
 from utils.utils import get_active_audio_apps, is_camera_in_use, log_event
 from utils.camera_watcher.camera_watcher import get_camera_processes
 
@@ -45,6 +49,17 @@ def detect_devices():
 def get_logs():
     with open("logs/access_logs.txt") as f:
         return {"logs": f.readlines}
+    
+@app.get("/safe-apps")
+def get_safe_apps():
+    file_path = os.path.join(os.path.dirname(__file__), "safe_apps.json")
+    try:
+        with open(file_path, "r") as f:
+            data = json.load(f)
+        return JSONResponse(content = data)
+    except Exception as e:
+        return JSONResponse(content = {"error": str(e)}, status_code = 500)
+
 
 # uvicorn is an ASGI "server" used to run asynchronous Python web apps, especially those built with frameworks like FastAPI and Starlette.
 
