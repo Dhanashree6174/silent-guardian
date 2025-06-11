@@ -10,10 +10,12 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // @ = /frontend/
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button"
 import { Mic, Camera, Shield, Activity, PieChart } from "lucide-react";
 
 // Register chart components
@@ -134,13 +136,18 @@ const Dashboard = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b bg-card">
-        <div className="container mx-auto px-6 py-8">
+        <div className="container flex items-center justify-between mx-auto px-6 py-8">
           <div className="flex items-center space-x-3">
             <Shield className="w-8 h-8 text-primary" />
             <div>
               <h1 className="text-3xl font-bold text-foreground">Privacy Monitor</h1>
               <p className="text-muted-foreground">Real-time device access tracking</p>
             </div>
+          </div>
+          <div> 
+            <Link to="/safeApps">
+            <Button variant="outline">Modify Safe Apps</Button>
+            </Link>
           </div>
         </div>
       </div>

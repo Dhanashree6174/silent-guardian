@@ -1,4 +1,4 @@
-from fastapi import FastAPI # FastAPI is used to create an instance of the web server.
+from fastapi import FastAPI, HTTPException, Request # FastAPI is used to create an instance of the web server.
 from datetime import datetime
 import psutil # allows you to get system and process information
 import json
@@ -28,7 +28,7 @@ def detect_devices():
     # cam_apps = get_camera_processes() if cam_active else []
     cam_apps = []
 
-    suspicious = [app for app in mic_apps if app.lower() not in SAFE_APPS["microphone"]]
+    suspicious = [app for app in mic_apps if app.lower() not in SAFE_APPS["mic_apps"]]
     
     for app in suspicious:
         log_event(app, "microphone")
@@ -56,9 +56,35 @@ def get_safe_apps():
     try:
         with open(file_path, "r") as f:
             data = json.load(f)
-        return JSONResponse(content = data)
+        # return JSONResponse(content = data)
+        return data #FastAPI will automatically convert it into a JSON response with application/json content type and a 200 OK status code.
+    except Exception as e:
+        return JSONResponse(content = {"error": str(e)}, status_code = 500) # use JSONResponse to manually set status code other than 200
+        
+    
+@app.post("/update-safe-apps")
+async def update_safe_apps(request: Request):
+    file_path = os.path.join(os.path.dirname(__file__), "safe_apps.json")
+    
+    try:
+        data = await request.json()
+        
+        mic_apps = data.get("mic_apps")
+        camera_apps = data.get("camera_apps")
+
+        if not isinstance(mic_apps, list) or not isinstance(camera_apps, list):
+            print("mic_apps and camera_apps should be lists")
+
+        with open(file_path, "w") as f:
+            json.dump({
+                "mic_apps" : mic_apps,
+                "camera_apps": camera_apps
+            }, f, indent = 2)
+
+        return {"status": "success", "message": "Safe apps updated"}
     except Exception as e:
         return JSONResponse(content = {"error": str(e)}, status_code = 500)
+            
 
 
 # uvicorn is an ASGI "server" used to run asynchronous Python web apps, especially those built with frameworks like FastAPI and Starlette.
