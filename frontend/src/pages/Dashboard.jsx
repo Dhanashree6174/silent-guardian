@@ -10,12 +10,12 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // @ = /frontend/
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { Mic, Camera, Shield, Activity, PieChart } from "lucide-react";
 
 // Register chart components
@@ -38,16 +38,22 @@ const Dashboard = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [cameraSafeApps, setCameraSafeApps] = useState([]);
+  const [micSafeApps, setMicSafeApps] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        
+
         // Fetch active devices data from FastAPI
-        const activeDevicesResponse = await axios.get("http://127.0.0.1:8000/active-devices");
+        const activeDevicesResponse = await axios.get(
+          "http://127.0.0.1:8000/active-devices"
+        );
         setMicData(
-          Array.isArray(activeDevicesResponse.data.mic_apps) ? activeDevicesResponse.data.mic_apps : []
+          Array.isArray(activeDevicesResponse.data.mic_apps)
+            ? activeDevicesResponse.data.mic_apps
+            : []
         );
         setCameraData(
           Array.isArray(activeDevicesResponse.data.camera_apps)
@@ -56,11 +62,16 @@ const Dashboard = () => {
         );
 
         // Fetch running apps for the pie chart data
-        const runningAppsResponse = await axios.get("http://127.0.0.1:8000/running-apps");
-        const appCounts = runningAppsResponse.data.running_apps.reduce((acc, app) => {
-          acc[app] = (acc[app] || 0) + 1;
-          return acc;
-        }, {});
+        const runningAppsResponse = await axios.get(
+          "http://127.0.0.1:8000/running-apps"
+        );
+        const appCounts = runningAppsResponse.data.running_apps.reduce(
+          (acc, app) => {
+            acc[app] = (acc[app] || 0) + 1;
+            return acc;
+          },
+          {}
+        );
 
         setPieData({
           labels: Object.keys(appCounts),
@@ -84,16 +95,23 @@ const Dashboard = () => {
             },
           ],
         });
+
+        const safeApps = await axios.get("http://127.0.0.1:8000/safe-apps");
+        setMicSafeApps(safeApps.data.mic_apps || []);
+        setCameraSafeApps(safeApps.data.camera_apps || []);
+        
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Failed to connect to the monitoring service. Please ensure the backend is running.");
+        setError(
+          "Failed to connect to the monitoring service. Please ensure the backend is running."
+        );
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-    
+
     // Set up polling every 1 min
     // const interval = setInterval(fetchData, 60000);
     // return () => clearInterval(interval);
@@ -105,20 +123,24 @@ const Dashboard = () => {
     plugins: {
       legend: {
         display: true,
-        position: 'bottom',
+        position: "bottom",
         labels: {
           padding: 20,
           usePointStyle: true,
         },
       },
       tooltip: {
-        backgroundColor: 'hsl(var(--popover))',
-        titleColor: 'hsl(var(--popover-foreground))',
-        bodyColor: 'hsl(var(--popover-foreground))',
-        borderColor: 'hsl(var(--border))',
+        backgroundColor: "hsl(var(--popover))",
+        titleColor: "hsl(var(--popover-foreground))",
+        bodyColor: "hsl(var(--popover-foreground))",
+        borderColor: "hsl(var(--border))",
         borderWidth: 1,
       },
     },
+  };
+
+  const isAppSafe = (app, safeApps) => {
+    return safeApps.includes(app);
   };
 
   if (isLoading) {
@@ -140,13 +162,17 @@ const Dashboard = () => {
           <div className="flex items-center space-x-3">
             <Shield className="w-8 h-8 text-primary" />
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Privacy Monitor</h1>
-              <p className="text-muted-foreground">Real-time device access tracking</p>
+              <h1 className="text-3xl font-bold text-foreground">
+                Privacy Monitor
+              </h1>
+              <p className="text-muted-foreground">
+                Real-time device access tracking
+              </p>
             </div>
           </div>
-          <div> 
+          <div>
             <Link to="/safeApps">
-            <Button variant="outline">Modify Safe Apps</Button>
+              <Button variant="outline">Modify Safe Apps</Button>
             </Link>
           </div>
         </div>
@@ -168,7 +194,10 @@ const Dashboard = () => {
               <CardTitle className="flex items-center space-x-2 text-lg">
                 <Mic className="w-5 h-5 text-blue-500" />
                 <span>Microphone Access</span>
-                <Badge variant={micData.length > 0 ? "destructive" : "secondary"} className="ml-auto">
+                <Badge
+                  variant={micData.length > 0 ? "destructive" : "secondary"}
+                  className="ml-auto"
+                >
                   {micData.length} active
                 </Badge>
               </CardTitle>
@@ -177,13 +206,22 @@ const Dashboard = () => {
               {micData.length === 0 ? (
                 <div className="text-center py-8">
                   <Mic className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-                  <p className="text-muted-foreground">No microphone access detected</p>
+                  <p className="text-muted-foreground">
+                    No microphone access detected
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-2">
                   {micData.map((app, index) => (
-                    <div key={index} className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50">
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                    <div
+                      key={index}
+                      className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50"
+                    >
+                      {isAppSafe(app, micSafeApps) ? (
+                        <div className="w-2 h-2 bg-green-500 mt-1 rounded-full animate-pulse"></div>
+                      ) : (
+                        <div className="w-2 h-2 bg-red-500 mt-1 rounded-full animate-pulse"></div>
+                      )}
                       <span className="font-medium text-sm">{app}</span>
                     </div>
                   ))}
@@ -198,7 +236,10 @@ const Dashboard = () => {
               <CardTitle className="flex items-center space-x-2 text-lg">
                 <Camera className="w-5 h-5 text-green-500" />
                 <span>Camera Access</span>
-                <Badge variant={cameraData.length > 0 ? "destructive" : "secondary"} className="ml-auto">
+                <Badge
+                  variant={cameraData.length > 0 ? "destructive" : "secondary"}
+                  className="ml-auto"
+                >
                   {cameraData.length} active
                 </Badge>
               </CardTitle>
@@ -207,13 +248,22 @@ const Dashboard = () => {
               {cameraData.length === 0 ? (
                 <div className="text-center py-8">
                   <Camera className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-                  <p className="text-muted-foreground">No camera access detected</p>
+                  <p className="text-muted-foreground">
+                    No camera access detected
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-2">
                   {cameraData.map((app, index) => (
-                    <div key={index} className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50">
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                    <div
+                      key={index}
+                      className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50"
+                    >
+                      {isAppSafe(app, cameraSafeAppsSafeApps) ? (
+                        <div className="w-2 h-2 bg-green-500 mt-1 rounded-full animate-pulse"></div>
+                      ) : (
+                        <div className="w-2 h-2 bg-red-500 mt-1 rounded-full animate-pulse"></div>
+                      )}
                       <span className="font-medium text-sm">{app}</span>
                     </div>
                   ))}
@@ -233,12 +283,14 @@ const Dashboard = () => {
             <CardContent>
               {pieData.labels && pieData.labels.length > 0 ? (
                 <div className="h-64 overflow-y-auto">
-                  <Pie data={pieData} options={chartOptions}/>
+                  <Pie data={pieData} options={chartOptions} />
                 </div>
               ) : (
                 <div className="text-center py-8">
                   <PieChart className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-                  <p className="text-muted-foreground">No running apps detected</p>
+                  <p className="text-muted-foreground">
+                    No running apps detected
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -252,7 +304,9 @@ const Dashboard = () => {
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2">
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm text-muted-foreground">Monitoring Active</span>
+                  <span className="text-sm text-muted-foreground">
+                    Monitoring Active
+                  </span>
                 </div>
                 <Separator orientation="vertical" className="h-4" />
                 <span className="text-sm text-muted-foreground">
@@ -260,9 +314,14 @@ const Dashboard = () => {
                 </span>
               </div>
               <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                <span>Total Apps: {(micData.length + cameraData.length)}</span>
+                <span>Total Apps: {micData.length + cameraData.length}</span>
                 <Separator orientation="vertical" className="h-4" />
-                <span>Privacy Level: {(micData.length + cameraData.length) === 0 ? 'Safe' : 'At Risk'}</span>
+                <span>
+                  Privacy Level:{" "}
+                  {micData.length + cameraData.length === 0
+                    ? "Safe"
+                    : "At Risk"}
+                </span>
               </div>
             </div>
           </CardContent>

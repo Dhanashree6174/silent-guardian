@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Mic, Camera, Plus, Activity, ChevronLeft } from "lucide-react";
+import { Mic, Camera, Plus, Activity, ChevronLeft, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -62,6 +62,7 @@ const SafeApps = () => {
         camera_apps: type === "camera" ? updatedList : cameraSafeApps,
       });
 
+
       if (type === "mic") {
         setMicSafeApps(updatedList);
         setNewMicSafeApp("");
@@ -70,9 +71,26 @@ const SafeApps = () => {
         setNewCamSafeApp("");
       }
     } catch (error) {
-      console.error("Error updating safe apps: ", error);
+      console.error("Error adding safe app: ", error);
     }
   };
+
+  const handleDeleteApp = async (type, app) => {
+    try{
+      const updatedMicApps = type === "mic" ? micSafeApps.filter(a => a !== app) : micSafeApps;
+      const updatedCameraApps = type === "camera" ? cameraSafeApps.filter(a => a != app) : cameraSafeApps;
+
+      await axios.post("http://127.0.0.1:8000/update-safe-apps", {
+        mic_apps: updatedMicApps,
+        camera_apps: updatedCameraApps
+      });
+
+      setMicSafeApps(updatedMicApps);
+      setCameraSafeApps(updatedCameraApps);
+    } catch (error) {
+      console.error("Error deleting safe app: ", error);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -112,10 +130,18 @@ const SafeApps = () => {
                 {micSafeApps.map((app, index) => (
                   <div
                     key={index}
-                    className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50"
+                    className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
                   >
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span className="font-medium text-sm">{app}</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-green-500 mt-1 rounded-full"></div>
+                      <span className="font-medium text-sm">{app}</span>
+                    </div>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleDeleteApp("mic", app)}
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -164,10 +190,18 @@ const SafeApps = () => {
                 {cameraSafeApps.map((app, index) => (
                   <div
                     key={index}
-                    className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50"
+                    className="flex items-center justify-between p-3 rounded-lg bg-muted/50"
                   >
-                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                    <span className="font-medium text-sm">{app}</span>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-2 h-2 bg-green-500 mt-1 rounded-full"></div>
+                      <span className="font-medium text-sm">{app}</span>
+                    </div>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleDeleteApp("camera", app)}
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </Button>
                   </div>
                 ))}
               </div>

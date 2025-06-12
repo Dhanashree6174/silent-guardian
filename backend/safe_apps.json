@@ -1,12 +1,12 @@
 {
   "mic_apps": [
-    "zoom.exe",
     "discord.exe",
     "obs64.exe",
+    "zoom.exe",
     "chrome.exe"
   ],
   "camera_apps": [
-    "zoom.exe",
-    "teams.exe"
+    "teams.exe",
+    "zoom.exe"
   ]
 }
