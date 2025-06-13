@@ -16,7 +16,14 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Mic, Camera, Shield, Activity, PieChart } from "lucide-react";
+import {
+  Mic,
+  Camera,
+  Shield,
+  Activity,
+  PieChart,
+  AppWindow,
+} from "lucide-react";
 
 // Register chart components
 ChartJS.register(
@@ -31,6 +38,7 @@ ChartJS.register(
 const Dashboard = () => {
   const [micData, setMicData] = useState([]);
   const [cameraData, setCameraData] = useState([]);
+  const [runningApps, setRunningApps] = useState([]);
   const [logs, setLogs] = useState([]);
   const [pieData, setPieData] = useState({
     labels: [],
@@ -65,41 +73,48 @@ const Dashboard = () => {
         const runningAppsResponse = await axios.get(
           "http://127.0.0.1:8000/running-apps"
         );
-        const appCounts = runningAppsResponse.data.running_apps.reduce(
-          (acc, app) => {
-            acc[app] = (acc[app] || 0) + 1;
-            return acc;
-          },
-          {}
+        // setRunningApps(runningAppsResponse.data.running_apps ?? []);
+        setRunningApps(
+          Array.isArray(runningAppsResponse.data.running_apps)
+            ? runningAppsResponse.data.running_apps
+            : []
         );
+        console.log("runningApps: ", runningAppsResponse);
 
-        setPieData({
-          labels: Object.keys(appCounts),
-          datasets: [
-            {
-              data: Object.values(appCounts),
-              backgroundColor: [
-                "hsl(var(--primary))",
-                "hsl(var(--secondary))",
-                "hsl(var(--accent))",
-                "hsl(var(--muted))",
-                "hsl(var(--destructive))",
-                "#10b981",
-                "#f59e0b",
-                "#ef4444",
-                "#8b5cf6",
-                "#06b6d4",
-              ],
-              borderWidth: 2,
-              borderColor: "hsl(var(--background))",
-            },
-          ],
-        });
+        // const appCounts = runningAppsResponse.data.running_apps.reduce(
+        //   (acc, app) => {
+        //     acc[app] = (acc[app] || 0) + 1;
+        //     return acc;
+        //   },
+        //   {}
+        // );
+
+        // setPieData({
+        //   labels: Object.keys(appCounts),
+        //   datasets: [
+        //     {
+        //       data: Object.values(appCounts),
+        //       backgroundColor: [
+        //         "hsl(var(--primary))",
+        //         "hsl(var(--secondary))",
+        //         "hsl(var(--accent))",
+        //         "hsl(var(--muted))",
+        //         "hsl(var(--destructive))",
+        //         "#10b981",
+        //         "#f59e0b",
+        //         "#ef4444",
+        //         "#8b5cf6",
+        //         "#06b6d4",
+        //       ],
+        //       borderWidth: 2,
+        //       borderColor: "hsl(var(--background))",
+        //     },
+        //   ],
+        // });
 
         const safeApps = await axios.get("http://127.0.0.1:8000/safe-apps");
         setMicSafeApps(safeApps.data.mic_apps || []);
         setCameraSafeApps(safeApps.data.camera_apps || []);
-        
       } catch (error) {
         console.error("Error fetching data:", error);
         setError(
@@ -272,8 +287,45 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          {/* App Distribution Chart */}
+          {/* Running Apps */}
           <Card className="hover:shadow-lg transition-shadow duration-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center space-x-2 text-lg">
+                <AppWindow className="w-5 h-5 text-purple-500" />
+                <span>Running Apps</span>
+                <Badge
+                  variant={runningApps.length > 0 ? "destructive" : "secondary"}
+                  className="ml-auto"
+                >
+                  {runningApps.length} active
+                </Badge>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {runningApps.length === 0 ? (
+                <div className="text-center py-8">
+                  <AppWindow className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
+                  <p className="text-muted-foreground">
+                    No running apps detected
+                  </p>
+                </div>
+              ) : (
+                <div className="flex flex-wrap h-64 overflow-y-auto">
+                  {runningApps.map((app, index) => (
+                    <div
+                      key={index}
+                      className="bg-purple-100 text-sm font-medium px-3 py-1 mb-1 mx-1 rounded-xl"
+                    >
+                      {app}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* App Distribution Chart */}
+          {/* <Card className="hover:shadow-lg transition-shadow duration-200">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center space-x-2 text-lg">
                 <PieChart className="w-5 h-5 text-purple-500" />
@@ -294,7 +346,7 @@ const Dashboard = () => {
                 </div>
               )}
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         {/* Status Bar */}
