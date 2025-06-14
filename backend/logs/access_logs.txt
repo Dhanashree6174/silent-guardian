@@ -1,1 +1,54 @@
 2025-06-13 15:30:46.012441 - Rainmeter.exe accessed microphone
+2025-06-14 23:04:46.679207 - WindowsCamera.exe accessed microphone
+2025-06-14 23:05:24.312044 - WindowsCamera.exe accessed microphone
+2025-06-14 23:07:01.544500 - WindowsCamera.exe accessed microphone
+2025-06-14 23:10:05.586121 - WindowsCamera.exe accessed microphone
+2025-06-14 23:10:05.592121 - Unkown accessed camera
+2025-06-14 23:13:03.661855 - WindowsCamera.exe accessed microphone
+2025-06-14 23:13:03.664844 - Unkown accessed camera
+2025-06-14 23:14:29.658025 - WindowsCamera.exe accessed microphone
+2025-06-14 23:14:29.688434 - Unkown accessed camera
+2025-06-14 23:17:09.861899 - WindowsCamera.exe accessed microphone
+2025-06-14 23:17:09.865899 - Unkown accessed camera
+2025-06-14 23:20:36.614410 - WindowsCamera.exe accessed microphone
+2025-06-14 23:20:36.618644 - Unkown accessed camera
+2025-06-14 23:21:41.899835 - WindowsCamera.exe accessed microphone
+2025-06-14 23:21:41.903821 - Unkown accessed camera
+2025-06-14 23:22:30.020253 - WindowsCamera.exe accessed microphone
+2025-06-14 23:22:30.025254 - Unkown accessed camera
+2025-06-14 23:23:12.905693 - WindowsCamera.exe accessed microphone
+2025-06-14 23:23:12.909692 - Unkown accessed camera
+2025-06-14 23:23:31.511802 - WindowsCamera.exe accessed microphone
+2025-06-14 23:23:31.517805 - Unkown accessed camera
+2025-06-14 23:23:48.470415 - WindowsCamera.exe accessed microphone
+2025-06-14 23:23:48.474419 - Unkown accessed camera
+2025-06-14 23:28:48.240716 - WindowsCamera.exe accessed microphone
+2025-06-14 23:28:48.246253 - Unkown accessed camera
+2025-06-14 23:29:31.748969 - WindowsCamera.exe accessed microphone
+2025-06-14 23:29:31.754028 - Unkown accessed camera
+2025-06-14 23:30:52.162417 - WindowsCamera.exe accessed microphone
+2025-06-14 23:30:52.167548 - Unkown accessed camera
+2025-06-14 23:39:17.336760 - WindowsCamera.exe accessed microphone
+2025-06-14 23:39:17.340767 - Unkown accessed camera
+2025-06-15 00:23:07.702781 - WindowsCamera.exe accessed microphone
+2025-06-15 00:23:07.707750 - cannot find specific process on windows accessed camera
+2025-06-15 00:25:02.450747 - WindowsCamera.exe accessed microphone
+2025-06-15 00:25:02.454748 - cannot find specific process on windows accessed camera
+2025-06-15 00:26:13.982593 - WindowsCamera.exe accessed microphone
+2025-06-15 00:26:13.988650 - cannot find specific process on windows accessed camera
+2025-06-15 00:26:30.550423 - WindowsCamera.exe accessed microphone
+2025-06-15 00:26:30.555418 - cannot find specific process on windows due to system restrcitions accessed camera
+2025-06-15 00:27:39.343040 - WindowsCamera.exe accessed microphone
+2025-06-15 00:27:39.348567 - cannot find specific process on windows due to system restrcitions accessed camera
+2025-06-15 00:27:59.099640 - WindowsCamera.exe accessed microphone
+2025-06-15 00:27:59.107638 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-15 00:32:11.378721 - WindowsCamera.exe accessed microphone
+2025-06-15 00:32:11.383993 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-15 00:32:37.611116 - WindowsCamera.exe accessed microphone
+2025-06-15 00:32:37.639653 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-15 00:36:54.818080 - WindowsCamera.exe accessed microphone
+2025-06-15 00:36:54.822592 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-15 00:42:34.080167 - WindowsCamera.exe accessed microphone
+2025-06-15 00:42:34.087165 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-15 00:46:09.238103 - WindowsCamera.exe accessed microphone
+2025-06-15 00:46:09.246102 - system restrictions: cannot find specific process on windows accessed camera

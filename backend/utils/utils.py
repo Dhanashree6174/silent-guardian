@@ -10,8 +10,8 @@ def get_active_audio_apps():
         # print("sessions: ", sessions)
         active_apps = []
         for session in sessions:
-            print("details: ", session.Process)
-            if(session.Process and session.SimpleAudioVolume.GetMasterVolume() > 0):
+            # print("details: ", session.Process)
+            if(session.Process and session.Process.name() and session.SimpleAudioVolume.GetMasterVolume() > 0):
                 active_apps.append(session.Process.name())
             print("active_apps: ", active_apps)
         return active_apps

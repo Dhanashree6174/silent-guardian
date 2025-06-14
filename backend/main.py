@@ -17,7 +17,16 @@ with open("safe_apps.json") as f:
 # defining a GET endpoint at /running-apps --> triggered when we visit http://localhost:8000/running-apps 
 @app.get("/running-apps")
 def get_running_apps():
-    apps = [p.name() for p in psutil.process_iter()] # Loops through all running processes
+    apps = []
+    for p in psutil.process_iter(['name']): #fetch name attribute
+        try:
+            name = p.info['name']
+            if name:
+                apps.append(name)
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            continue # they give empty string "" as process name
+
+    apps = sorted(set(apps), key=str.lower)  # sort alphabetically (case-insensitive) and remove duplicates
     return {"running_apps": apps}
 
 @app.get("/active-devices")
@@ -25,8 +34,9 @@ def detect_devices():
     mic_apps = get_active_audio_apps()
     cam_active = is_camera_in_use()
     # print("is camera active: ", cam_active)
-    # cam_apps = get_camera_processes() if cam_active else []
-    cam_apps = []
+    cam_apps = get_camera_processes() if cam_active else []
+    # cam_apps = []
+    print("cam_apps: ", cam_apps)
 
     suspicious = [app for app in mic_apps if app.lower() not in SAFE_APPS["mic_apps"]]
     

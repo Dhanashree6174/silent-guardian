@@ -23,6 +23,7 @@ import {
   Activity,
   PieChart,
   AppWindow,
+  RotateCw
 } from "lucide-react";
 
 // Register chart components
@@ -38,6 +39,7 @@ ChartJS.register(
 const Dashboard = () => {
   const [micData, setMicData] = useState([]);
   const [cameraData, setCameraData] = useState([]);
+  const [cameraActive, setcameraActive] = useState(false);
   const [runningApps, setRunningApps] = useState([]);
   const [logs, setLogs] = useState([]);
   const [pieData, setPieData] = useState({
@@ -49,8 +51,7 @@ const Dashboard = () => {
   const [cameraSafeApps, setCameraSafeApps] = useState([]);
   const [micSafeApps, setMicSafeApps] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = async () => {
       try {
         setIsLoading(true);
 
@@ -68,7 +69,7 @@ const Dashboard = () => {
             ? activeDevicesResponse.data.camera_apps
             : []
         );
-
+        setcameraActive(activeDevicesResponse.data.camera_active)
         // Fetch running apps for the pie chart data
         const runningAppsResponse = await axios.get(
           "http://127.0.0.1:8000/running-apps"
@@ -79,7 +80,7 @@ const Dashboard = () => {
             ? runningAppsResponse.data.running_apps
             : []
         );
-        console.log("runningApps: ", runningAppsResponse);
+        // console.log("runningApps: ", runningAppsResponse);
 
         // const appCounts = runningAppsResponse.data.running_apps.reduce(
         //   (acc, app) => {
@@ -125,8 +126,8 @@ const Dashboard = () => {
       }
     };
 
+  useEffect(() => {
     fetchData();
-
     // Set up polling every 1 min
     // const interval = setInterval(fetchData, 60000);
     // return () => clearInterval(interval);
@@ -185,7 +186,8 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-          <div>
+          <div className="flex items-center justify-center space-x-2">
+            <Button variant="outline" onClick={fetchData}><RotateCw className="w-10 h-15"/></Button>
             <Link to="/safeApps">
               <Button variant="outline">Modify Safe Apps</Button>
             </Link>
@@ -252,10 +254,10 @@ const Dashboard = () => {
                 <Camera className="w-5 h-5 text-green-500" />
                 <span>Camera Access</span>
                 <Badge
-                  variant={cameraData.length > 0 ? "destructive" : "secondary"}
+                  variant={cameraActive ? "destructive" : "secondary"}
                   className="ml-auto"
                 >
-                  {cameraData.length} active
+                  {cameraActive ? "in use" : " not in use"}
                 </Badge>
               </CardTitle>
             </CardHeader>
@@ -274,7 +276,7 @@ const Dashboard = () => {
                       key={index}
                       className="flex items-center space-x-3 p-3 rounded-lg bg-muted/50"
                     >
-                      {isAppSafe(app, cameraSafeAppsSafeApps) ? (
+                      {isAppSafe(app, cameraSafeApps) ? (
                         <div className="w-2 h-2 bg-green-500 mt-1 rounded-full animate-pulse"></div>
                       ) : (
                         <div className="w-2 h-2 bg-red-500 mt-1 rounded-full animate-pulse"></div>
@@ -314,7 +316,7 @@ const Dashboard = () => {
                   {runningApps.map((app, index) => (
                     <div
                       key={index}
-                      className="bg-purple-100 text-sm font-medium px-3 py-1 mb-1 mx-1 rounded-xl"
+                      className="bg-muted/80 text-sm font-medium px-3 py-1 mb-1 mx-1 rounded-xl"
                     >
                       {app}
                     </div>
