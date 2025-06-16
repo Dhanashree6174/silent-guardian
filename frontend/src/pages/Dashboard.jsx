@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Pie } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  CategoryScale,
-  LinearScale,
-} from "chart.js";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // @ = /frontend/
 import { Badge } from "@/components/ui/badge";
@@ -21,20 +11,10 @@ import {
   Camera,
   Shield,
   Activity,
-  PieChart,
   AppWindow,
-  RotateCw
+  RotateCw,
 } from "lucide-react";
-
-// Register chart components
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  CategoryScale,
-  LinearScale
-);
+import MicUsagePieChart from "./PieCharts";
 
 const Dashboard = () => {
   const [micData, setMicData] = useState([]);
@@ -52,108 +32,56 @@ const Dashboard = () => {
   const [micSafeApps, setMicSafeApps] = useState([]);
 
   const fetchData = async () => {
-      try {
-        setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-        // Fetch active devices data from FastAPI
-        const activeDevicesResponse = await axios.get(
-          "http://127.0.0.1:8000/active-devices"
-        );
-        setMicData(
-          Array.isArray(activeDevicesResponse.data.mic_apps)
-            ? activeDevicesResponse.data.mic_apps
-            : []
-        );
-        setCameraData(
-          Array.isArray(activeDevicesResponse.data.camera_apps)
-            ? activeDevicesResponse.data.camera_apps
-            : []
-        );
-        setcameraActive(activeDevicesResponse.data.camera_active)
-        // Fetch running apps for the pie chart data
-        const runningAppsResponse = await axios.get(
-          "http://127.0.0.1:8000/running-apps"
-        );
-        // setRunningApps(runningAppsResponse.data.running_apps ?? []);
-        setRunningApps(
-          Array.isArray(runningAppsResponse.data.running_apps)
-            ? runningAppsResponse.data.running_apps
-            : []
-        );
-        // console.log("runningApps: ", runningAppsResponse);
+      // Fetch active devices data from FastAPI
+      const activeDevicesResponse = await axios.get(
+        "http://127.0.0.1:8000/active-devices"
+      );
+      setMicData(
+        Array.isArray(activeDevicesResponse.data.mic_apps)
+          ? activeDevicesResponse.data.mic_apps
+          : []
+      );
+      setCameraData(
+        Array.isArray(activeDevicesResponse.data.camera_apps)
+          ? activeDevicesResponse.data.camera_apps
+          : []
+      );
+      setcameraActive(activeDevicesResponse.data.camera_active);
+      // Fetch running apps for the pie chart data
+      const runningAppsResponse = await axios.get(
+        "http://127.0.0.1:8000/running-apps"
+      );
+      // setRunningApps(runningAppsResponse.data.running_apps ?? []);
+      setRunningApps(
+        Array.isArray(runningAppsResponse.data.running_apps)
+          ? runningAppsResponse.data.running_apps
+          : []
+      );
+      // console.log("runningApps: ", runningAppsResponse);
 
-        // const appCounts = runningAppsResponse.data.running_apps.reduce(
-        //   (acc, app) => {
-        //     acc[app] = (acc[app] || 0) + 1;
-        //     return acc;
-        //   },
-        //   {}
-        // );
-
-        // setPieData({
-        //   labels: Object.keys(appCounts),
-        //   datasets: [
-        //     {
-        //       data: Object.values(appCounts),
-        //       backgroundColor: [
-        //         "hsl(var(--primary))",
-        //         "hsl(var(--secondary))",
-        //         "hsl(var(--accent))",
-        //         "hsl(var(--muted))",
-        //         "hsl(var(--destructive))",
-        //         "#10b981",
-        //         "#f59e0b",
-        //         "#ef4444",
-        //         "#8b5cf6",
-        //         "#06b6d4",
-        //       ],
-        //       borderWidth: 2,
-        //       borderColor: "hsl(var(--background))",
-        //     },
-        //   ],
-        // });
-
-        const safeApps = await axios.get("http://127.0.0.1:8000/safe-apps");
-        setMicSafeApps(safeApps.data.mic_apps || []);
-        setCameraSafeApps(safeApps.data.camera_apps || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(
-          "Failed to connect to the monitoring service. Please ensure the backend is running."
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      const safeApps = await axios.get("http://127.0.0.1:8000/safe-apps");
+      setMicSafeApps(safeApps.data.mic_apps || []);
+      setCameraSafeApps(safeApps.data.camera_apps || []);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError(
+        "Failed to connect to the monitoring service. Please ensure the backend is running."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchData();
+    console.log("Pie data being passed:", pieData);
     // Set up polling every 1 min
     // const interval = setInterval(fetchData, 60000);
     // return () => clearInterval(interval);
   }, []);
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: true,
-        position: "bottom",
-        labels: {
-          padding: 20,
-          usePointStyle: true,
-        },
-      },
-      tooltip: {
-        backgroundColor: "hsl(var(--popover))",
-        titleColor: "hsl(var(--popover-foreground))",
-        bodyColor: "hsl(var(--popover-foreground))",
-        borderColor: "hsl(var(--border))",
-        borderWidth: 1,
-      },
-    },
-  };
 
   const isAppSafe = (app, safeApps) => {
     return safeApps.includes(app);
@@ -187,7 +115,9 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="flex items-center justify-center space-x-2">
-            <Button variant="outline" onClick={fetchData}><RotateCw className="w-10 h-15"/></Button>
+            <Button variant="outline" onClick={fetchData}>
+              <RotateCw className="w-10 h-15" />
+            </Button>
             <Link to="/safeApps">
               <Button variant="outline">Modify Safe Apps</Button>
             </Link>
@@ -209,7 +139,7 @@ const Dashboard = () => {
           <Card className="hover:shadow-lg transition-shadow duration-200">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center space-x-2 text-lg">
-                <Mic className="w-5 h-5 text-blue-500" />
+                <Mic className="w-5 h-5 text-b lue-500" />
                 <span>Microphone Access</span>
                 <Badge
                   variant={micData.length > 0 ? "destructive" : "secondary"}
@@ -325,30 +255,13 @@ const Dashboard = () => {
               )}
             </CardContent>
           </Card>
+        </div>
 
-          {/* App Distribution Chart */}
-          {/* <Card className="hover:shadow-lg transition-shadow duration-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center space-x-2 text-lg">
-                <PieChart className="w-5 h-5 text-purple-500" />
-                <span>App Distribution</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {pieData.labels && pieData.labels.length > 0 ? (
-                <div className="h-64 overflow-y-auto">
-                  <Pie data={pieData} options={chartOptions} />
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <PieChart className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-                  <p className="text-muted-foreground">
-                    No running apps detected
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card> */}
+        {/* Mic Usage Distribution Chart */}
+        <div className="container mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <MicUsagePieChart micData={micData} micSafeApps={micSafeApps} />
+          </div>
         </div>
 
         {/* Status Bar */}

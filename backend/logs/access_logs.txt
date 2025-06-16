@@ -52,3 +52,19 @@
 2025-06-15 00:42:34.087165 - system restrictions: cannot find specific process on windows accessed camera
 2025-06-15 00:46:09.238103 - WindowsCamera.exe accessed microphone
 2025-06-15 00:46:09.246102 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-17 00:26:46.040988 - Rainmeter.exe accessed microphone
+2025-06-17 00:30:40.862698 - Rainmeter.exe accessed microphone
+2025-06-17 00:33:46.168623 - Rainmeter.exe accessed microphone
+2025-06-17 00:34:57.547539 - Rainmeter.exe accessed microphone
+2025-06-17 00:39:49.814665 - Rainmeter.exe accessed microphone
+2025-06-17 00:41:16.380637 - Rainmeter.exe accessed microphone
+2025-06-17 00:42:30.142028 - Rainmeter.exe accessed microphone
+2025-06-17 00:44:57.656277 - Rainmeter.exe accessed microphone
+2025-06-17 00:45:40.309830 - Rainmeter.exe accessed microphone
+2025-06-17 00:49:53.739902 - Rainmeter.exe accessed microphone
+2025-06-17 00:52:08.820933 - Rainmeter.exe accessed microphone
+2025-06-17 00:54:18.465011 - Rainmeter.exe accessed microphone
+2025-06-17 01:00:51.722908 - Rainmeter.exe accessed microphone
+2025-06-17 01:03:11.687614 - Rainmeter.exe accessed microphone
+2025-06-17 01:05:04.767031 - Rainmeter.exe accessed microphone
+2025-06-17 01:05:44.304312 - Rainmeter.exe accessed microphone
