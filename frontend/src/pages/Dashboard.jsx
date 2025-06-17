@@ -14,7 +14,7 @@ import {
   AppWindow,
   RotateCw,
 } from "lucide-react";
-import MicUsagePieChart from "./PieCharts";
+import {MicUsagePieChart, MicAccessBarChart} from "./PieCharts";
 
 const Dashboard = () => {
   const [micData, setMicData] = useState([]);
@@ -77,7 +77,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchData();
-    console.log("Pie data being passed:", pieData);
     // Set up polling every 1 min
     // const interval = setInterval(fetchData, 60000);
     // return () => clearInterval(interval);
@@ -139,7 +138,7 @@ const Dashboard = () => {
           <Card className="hover:shadow-lg transition-shadow duration-200">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center space-x-2 text-lg">
-                <Mic className="w-5 h-5 text-b lue-500" />
+                <Mic className="w-5 h-5 text-blue-500" />
                 <span>Microphone Access</span>
                 <Badge
                   variant={micData.length > 0 ? "destructive" : "secondary"}
@@ -223,7 +222,7 @@ const Dashboard = () => {
           <Card className="hover:shadow-lg transition-shadow duration-200">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center space-x-2 text-lg">
-                <AppWindow className="w-5 h-5 text-purple-500" />
+                <AppWindow className="w-5 h-5 text-indigo-500" />
                 <span>Running Apps</span>
                 <Badge
                   variant={runningApps.length > 0 ? "destructive" : "secondary"}
@@ -261,6 +260,7 @@ const Dashboard = () => {
         <div className="container mx-auto px-6 py-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <MicUsagePieChart micData={micData} micSafeApps={micSafeApps} />
+            <MicAccessBarChart />
           </div>
         </div>
 

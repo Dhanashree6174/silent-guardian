@@ -58,7 +58,7 @@ def detect_devices():
 @app.get("/logs")
 def get_logs():
     with open("logs/access_logs.txt") as f:
-        return {"logs": f.readlines}
+        return {"logs": f.readlines()}
     
 @app.get("/safe-apps")
 def get_safe_apps():
