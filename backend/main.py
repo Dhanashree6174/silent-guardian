@@ -8,8 +8,15 @@ from fastapi.responses import JSONResponse
 # importing defined functions
 from utils.utils import get_active_audio_apps, is_camera_in_use, log_event
 from utils.camera_watcher.camera_watcher import get_camera_processes
+from apscheduler.schedulers.background import BackgroundScheduler
+from clean_logs import clean_old_logs
 
 app = FastAPI() # Creates an instance of the FastAPI, which is used to define API routes.
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(clean_old_logs, "interval", days = 1)
+# scheduler.add_job(clean_old_logs, "interval", minutes = 1) # testing with 1 min
+scheduler.start()
 
 with open("safe_apps.json") as f:
     SAFE_APPS = json.load(f)
@@ -57,7 +64,8 @@ def detect_devices():
 
 @app.get("/logs")
 def get_logs():
-    with open("logs/access_logs.txt") as f:
+    file_path = os.path.join(os.path.dirname(__file__), "logs", "access_logs.txt")
+    with open(file_path, "r") as f:
         return {"logs": f.readlines()}
     
 @app.get("/safe-apps")
