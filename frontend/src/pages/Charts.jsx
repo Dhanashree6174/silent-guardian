@@ -123,7 +123,7 @@ export const MicUsagePieChart = ({ micData, micSafeApps }) => {
           ) : (
             <div className="text-center py-8">
               <PieChart className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
-              <p className="text-muted-foreground">No mic usage data found</p>
+              <p className="text-muted-foreground">No active mic usage data found</p>
             </div>
           )}
         </CardContent>

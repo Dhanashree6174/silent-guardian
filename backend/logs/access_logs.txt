@@ -83,3 +83,10 @@
 2025-06-17 14:40:20.425882 - explorer.exe accessed microphone
 2025-06-17 14:46:06.705928 - explorer.exe accessed microphone
 2025-06-17 14:48:22.292752 - explorer.exe accessed microphone
+2025-06-19 15:48:41.929680 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-19 15:48:46.996197 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-19 15:48:51.896347 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-19 15:48:56.873196 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-19 15:49:01.877111 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-19 15:49:06.882757 - system restrictions: cannot find specific process on windows accessed camera
+2025-06-19 15:53:19.657556 - system restrictions: cannot find specific process on windows accessed camera

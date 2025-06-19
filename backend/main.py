@@ -10,6 +10,7 @@ from utils.utils import get_active_audio_apps, is_camera_in_use, log_event
 from utils.camera_watcher.camera_watcher import get_camera_processes
 from apscheduler.schedulers.background import BackgroundScheduler
 from clean_logs import clean_old_logs
+from suspicion_heuristics import detect_long_access, detect_multiple_unknowns
 
 app = FastAPI() # Creates an instance of the FastAPI, which is used to define API routes.
 
@@ -102,8 +103,41 @@ async def update_safe_apps(request: Request):
         return {"status": "success", "message": "Safe apps updated"}
     except Exception as e:
         return JSONResponse(content = {"error": str(e)}, status_code = 500)
-            
+    
 
+# suspicious activity
+
+@app.get("/suspicious-activity")
+def check_suspicious_activity():
+    try:
+        file_path = os.path.join(os.path.dirname(__file__), "logs", "access_logs.txt")
+        with open(file_path, "r") as f:
+            log_lines = f.readlines()
+
+        recent_unknowns = []
+        long_access_apps = []
+        
+        safe_apps = SAFE_APPS["mic_apps"] + SAFE_APPS["camera_apps"]
+
+        recent_unknowns = detect_multiple_unknowns(log_lines, safe_apps)
+        long_access_apps = detect_long_access(log_lines)
+
+        suspicious_apps = []
+        suspicious_apps += recent_unknowns
+        suspicious_apps += long_access_apps 
+
+        print("recent_unknowns", recent_unknowns)
+        print("long_access_apps", long_access_apps)
+
+        return {
+            "suspicious_apps": suspicious_apps
+        }
+    except Exception as e:
+        return JSONResponse(content = {"error": str(e)}, status_code = 500)
+
+       
+
+# check_suspicious_activity()
 
 # uvicorn is an ASGI "server" used to run asynchronous Python web apps, especially those built with frameworks like FastAPI and Starlette.
 

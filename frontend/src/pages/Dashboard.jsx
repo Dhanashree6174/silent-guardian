@@ -14,7 +14,8 @@ import {
   AppWindow,
   RotateCw,
 } from "lucide-react";
-import {MicUsagePieChart, MicAccessBarChart} from "./PieCharts";
+import {MicUsagePieChart, MicAccessBarChart} from "./Charts";
+import SuspiciousAppsTable from "./SuspiciousAppsTable";
 
 const Dashboard = () => {
   const [micData, setMicData] = useState([]);
@@ -257,12 +258,13 @@ const Dashboard = () => {
         </div>
 
         {/* Mic Usage Distribution Chart */}
-        <div className="container mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
             <MicUsagePieChart micData={micData} micSafeApps={micSafeApps} />
             <MicAccessBarChart />
           </div>
-        </div>
+
+        {/* Enhanced App Activity Table */}
+        <SuspiciousAppsTable />
 
         {/* Status Bar */}
         <Card className="mt-6">
